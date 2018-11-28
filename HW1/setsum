@@ -1,0 +1,112 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <utility>
+#include <vector>
+using namespace std;
+
+
+void reverse(string& s) {
+    string r=””;
+    for(int i=s.size()-1; i>=0; --i)
+        r+=s[i];
+
+    s=r;
+}
+
+void stringAdder(string& x, string& y, string& r) {
+    unsigned int carry=0, num1=0, num2=0, num3=0;
+    r=””; //clear out the result
+    reverse(x);    reverse(y);
+
+    for(int i=0; i<y.size(); ++i) {
+        if(i>=x.size()) {
+            num3=stoi(y[i])+carry;
+            if(num3>=10) {
+                num3%=10;
+                carry=1;
+            }
+            else
+                carry=0;
+        }
+        else {
+            num1=stoi(x[i]);
+            num2=stoi(y[i]);
+            num3=(num1+num2+carry)%10;
+            if(num1+num2+carry<10)
+                carry=0;
+            else
+                carry=1;
+        }
+        
+        r+=num3;
+        num1=num2=num3=0;
+    }
+
+    if(x.size()>y.size()) {
+        for(int j=y.size(); j<x.size(); ++j) {
+            num3=stoi(x[j])+carry;
+            if(num3>=10) {
+                num3%=10;
+                carry=1;
+            }
+            else
+                carry=0;
+
+            r+=num3;
+            num3=0;
+        }
+    }
+
+    if(carry!=0)
+        r+=carry;
+
+    reverse(r);
+}
+
+bool equalstr(string& x, string& y) {
+    if(x.size()!=y.size())
+        return false;
+    for(int i=0; i<x.size(); ++i)
+        if(x[i]!=y[i])
+            return false;
+
+    return true;
+}
+
+void main(int argc, char* argv) {
+
+    ifstream input(“Numbers.txt”);
+    if (!input.good()) {
+        cerr << "Can't open " << argv[3] << " to read.\n";
+          exit(1);
+      }
+
+    string[] nums = string[100];
+    vector<pair<vector<unsigned int>, string> > sums;
+vector<int> x;
+    for(int i=0; i<100; ++i) {
+        input >> nums[i];
+        x.push_back(i);
+        sums.push_back(make_pair(x, nums[i]));
+        x.clear();
+    }
+
+    string r=””;
+    for(int j=0; j<99; ++j) {
+        for(int k=j; k<100; ++k) {
+            x.push_back(j);
+            x.push_back(k);
+            r=””;
+            stringAdder(nums[j], nums[k], r);
+            
+            sums.push_back(make_pair(x, r);
+        }
+    }
+
+    
+
+
+    
+
+
